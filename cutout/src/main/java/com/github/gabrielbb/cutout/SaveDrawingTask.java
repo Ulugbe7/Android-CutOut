@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.nio.file.Files;
 import java.util.UUID;
 
 import static android.view.View.VISIBLE;
@@ -37,7 +38,7 @@ class SaveDrawingTask extends AsyncTask<Bitmap, Void, Pair<File, Exception>> {
     protected Pair<File, Exception> doInBackground(Bitmap... bitmaps) {
 
         try {
-            File file = File.createTempFile(SAVED_IMAGE_NAME, SAVED_IMAGE_FORMAT, activityWeakReference.get().getApplicationContext().getCacheDir());
+            File file = Files.createTempFile(activityWeakReference.get().getApplicationContext().getCacheDir().toPath(), SAVED_IMAGE_NAME, SAVED_IMAGE_FORMAT).toFile();
 
             try (FileOutputStream out = new FileOutputStream(file)) {
                 bitmaps[0].compress(Bitmap.CompressFormat.PNG, 95, out);
